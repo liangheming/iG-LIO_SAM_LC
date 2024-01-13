@@ -1,33 +1,78 @@
-# FASTLIO_SAM_LC
+# iG-LIO_SAM_LC
 
 ## 主要工作
-1. 对原始FASTLIO进行代码重构 
-2. 建图线程添加GTSAM做回环
-3. 添加定位线程用于基于已知地图的重定位
-4. 添加首帧重力对齐(用于传感器非水平放置情况)
-5. 目前暂时支持MID_360的传感器(买不起其他传感器)
-6. 代码结构更加简单，流程逻辑也更加清晰(非常自以为是的评价)
+1. 对[iG-LIO](https://github.com/zijiechenrobotics/ig_lio)进行梳理和结构改写(未完全对齐原REPO)
+2. 参考[FASTLIO](https://github.com/hku-mars/FAST_LIO)的实现,添加了重力优化和外参优化
+3. 基于GTSAM和基础ICP匹配,增加了回环线程用于PGO
+4. 添加重定位线程，用于支持基于已知地图的定位功能
+5. 目前暂时支持MID_360的传感器
+6. 改写了并增加了首帧重力对齐，用于应对传感器非水平放置的情况
+7. 完全替换了FASTLIO中的IKFoM_toolkit，使用高斯牛顿法等价替换迭代误差卡尔曼，算法思路更加平铺直叙
 
 ## 环境说明
 ```text
-ubuntu20.04
-ros noetic
-pcl 1.10
+系统版本: ubuntu20.04
+机器人操作系统: ros1-noetic
 ```
 
 ## 编译依赖
 1. livox_ros_driver2
 2. gtsam (noetic版本 可以使用 sudo apt install ros-noetic-gtsam 直接安装，其他版本可能需要独立安装)
 3. pcl
+4. sophus
+5. eigen
 
+### 1.安装 LIVOX-SDK2
+```shell
+git clone https://github.com/Livox-SDK/Livox-SDK2.git
+cd ./Livox-SDK2/
+mkdir build
+cd build
+cmake .. && make -j
+sudo make install
+```
+
+### 2.安装 livox_ros_driver2
+```shell
+mkdir -r ws_livox/src
+git clone https://github.com/Livox-SDK/livox_ros_driver2.git ws_livox/src/livox_ros_driver2
+cd ws_livox/src/livox_ros_driver2
+./build.sh ROS1
+```
+
+### 3. 安装gtsam(ros noetic 可以直接安装)
+```shell
+sudo apt install ros-noetic-gtsam
+```
+### 4. 安装Sophus
+```
+git clone https://github.com/strasdat/Sophus.git
+cd Sophus
+mkdir build && cd build
+cmake .. -DSOPHUS_USE_BASIC_LOGGING=ON
+make
+sudo make install
+```
+**新的Sophus依赖fmt，可以在CMakeLists.txt中添加add_compile_definitions(SOPHUS_USE_BASIC_LOGGING)去除，否则会报错**
+### 5.安装 iG-LIO_SAM_LC
+```shell
+mkdir -r ws_igli/src
+git clone 
+cd ws_iglio/src
+catkin_make 
+source devel/setup.bash
+```
 ## 启动脚本
 1. 建图线程
 ```shell
-roslaunch fastlio mapping.launch
+roslaunch lio mapping.launch
+rosbag play 
 ```
 2. 定位线程
 ```shell
-roslaunch fastlio localize.launch
+roslaunch lio localize.launch
+rosservice call /slam_reloc "{pcd_path: 'you_pcd_path.pcd', x: 0.0, y: 0.0, z: 0.0, roll: 0.0, pitch: 0.0, yaw: 0.0}" 
+
 ```
 
 ## 服务脚本
@@ -38,10 +83,6 @@ resolution: 0.0"
 ```
 **目前resolution没用(需要降采样，可离线自行降采样)**
 
-2. 重定位
-```shell
-rosservice call /slam_reloc "{pcd_path: 'you_pcd_path.pcd', x: 0.0, y: 0.0, z: 0.0, roll: 0.0, pitch: 0.0, yaw: 0.0}" 
-```
 
 ## 特别感谢
 1. [FASTLIO2](https://github.com/hku-mars/FAST_LIO)
