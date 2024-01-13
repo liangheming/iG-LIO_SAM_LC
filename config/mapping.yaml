@@ -6,7 +6,7 @@ livox_topic: /livox/lidar
 
 local_rate: 20.0
 loop_rate: 1.0
-publish_map_cloud: true
+
 
 lio_builder:
   scan_resolution: 0.5
