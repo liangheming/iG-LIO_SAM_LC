@@ -1,0 +1,5 @@
+<launch>
+    <rosparam command="load" file="$(find lio)/config/localize.yaml" />
+    <node pkg="lio" type="localizer_node" name="localizer_node" output="screen"/>
+    <node launch-prefix="nice" pkg="rviz" type="rviz" name="rviz" args="-d $(find lio)/rviz/localize.rviz" />
+</launch>

@@ -1,0 +1,32 @@
+map_frame: map
+local_frame: local
+body_frame: body
+imu_topic: /livox/imu
+livox_topic: /livox/lidar
+
+local_rate: 20.0
+loop_rate: 1.0
+publish_map_cloud: true
+lio_builder:
+  scan_resolution: 0.5
+  map_resolution: 0.5
+  point2plane_gain: 1000.0
+  plane2plane_gain: 100.0
+  map_capacity: 5000000
+  grid_capacity: 20
+  extrinsic_est_en: false
+  align_gravity: true
+  near_mode: 1
+  imu_ext_rot: [1, 0, 0, 0, 1, 0, 0, 0, 1]
+  imu_ext_pos: [-0.011, -0.02329, 0.04412]
+
+localizer:
+  refine_resolution: 0.25
+  rough_resolution: 0.5
+  refine_iter: 5
+  rough_iter: 10
+  thresh: 0.15
+  xy_offset: 1.0
+  yaw_offset: 0
+  yaw_resolution: 0.5
+

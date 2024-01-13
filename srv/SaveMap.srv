@@ -1,0 +1,5 @@
+string save_path
+float32 resolution
+---
+int32 status
+string message
