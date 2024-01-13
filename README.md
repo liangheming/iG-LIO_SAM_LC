@@ -57,34 +57,40 @@ sudo make install
 ### 5.安装 iG-LIO_SAM_LC
 ```shell
 mkdir -r ws_igli/src
-git clone 
 cd ws_iglio/src
+git clone https://github.com/liangheming/iG-LIO_SAM_LC.git
+cd ..
 catkin_make 
 source devel/setup.bash
 ```
+
+## DEMO 数据
+```text
+链接: https://pan.baidu.com/s/1ZPUwWyHmvpGHuL9TiFrsmA?pwd=k9vx 提取码: k9vx 
+--来自百度网盘超级会员v7的分享
+```
+
 ## 启动脚本
 1. 建图线程
 ```shell
 roslaunch lio mapping.launch
-rosbag play 
+rosbag play your_bag.bag
 ```
-2. 定位线程
-```shell
-roslaunch lio localize.launch
-rosservice call /slam_reloc "{pcd_path: 'you_pcd_path.pcd', x: 0.0, y: 0.0, z: 0.0, roll: 0.0, pitch: 0.0, yaw: 0.0}" 
-
-```
-
-## 服务脚本
-1. 保存地图
+2. 保存地图
 ```shell
 rosservice call /save_map "save_path: 'you_pcd_save_path.pcd'
 resolution: 0.0"
-```
-**目前resolution没用(需要降采样，可离线自行降采样)**
+``` 
 
+3. 定位线程
+```shell
+roslaunch lio localize.launch
+rosservice call /slam_reloc "{pcd_path: 'you_pcd_path.pcd', x: 0.0, y: 0.0, z: 0.0, roll: 0.0, pitch: 0.0, yaw: 0.0}" 
+rosbag play your_bag.bag
+```
 
 ## 特别感谢
 1. [FASTLIO2](https://github.com/hku-mars/FAST_LIO)
-2. [FASTLIO-SAM](https://github.com/kahowang/FAST_LIO_SAM)
-3. [FASTLIO-LC](https://github.com/HViktorTsoi/FAST_LIO_LOCALIZATION)
+2. [iG-LIO](https://github.com/zijiechenrobotics/ig_lio)
+3. [FASTLIO-SAM](https://github.com/kahowang/FAST_LIO_SAM)
+4. [FASTLIO-LC](https://github.com/HViktorTsoi/FAST_LIO_LOCALIZATION)
