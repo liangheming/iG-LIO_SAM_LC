@@ -160,8 +160,8 @@ namespace lio
                 J.block<1, 3>(0, 6) = C;
                 J.block<1, 3>(0, 9) = D;
             }
-            shared_state.H += J.transpose() * params_.plane2plane_gain * J;
-            shared_state.b += J.transpose() * params_.plane2plane_gain * error;
+            shared_state.H += J.transpose() * params_.point2plane_gain * J;
+            shared_state.b += J.transpose() * params_.point2plane_gain * error;
         }
 
         if (effect_feat_num < 1)
