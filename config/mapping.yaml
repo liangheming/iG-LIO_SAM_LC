@@ -11,7 +11,7 @@ loop_rate: 1.0
 lio_builder:
   scan_resolution: 0.5
   map_resolution: 0.5
-  point2plane_gain: 1000.0
+  point2plane_gain: 100.0
   plane2plane_gain: 100.0
   map_capacity: 5000000
   grid_capacity: 20
